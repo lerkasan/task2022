@@ -13,13 +13,13 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.provision "shell" do |shell|
-    shell.path = "./install_ansible.sh"
-  end
-
-  config.vm.provision "shell" do |shell|
     shell.path = "./install_run_apache.sh"
   end
 
+#   config.vm.provision "shell" do |shell|
+#     shell.path = "./scripts/install_ansible.sh"
+#   end
+#
 #   config.vm.provision "httpd_container", type: "ansible_local" do |ansible|
 #     ansible.verbose = "v"
 #     ansible.playbook = "./playbooks/run_httpd_container.yml"
