@@ -1,6 +1,6 @@
 ---
 - name: Deploy HTML page in Apache Httpd container
-  hosts: all
+  hosts: default
   become: yes
   become_user: root
 
@@ -49,9 +49,9 @@
         image: httpd:latest
         state: started
         published_ports:
-          - 80:80
+          - 8080:80
         volumes:
-          - /home/vagrant/html:/usr/local/apache2/htdocs/:ro
+          - /home/vagrant/playbooks/html:/usr/local/apache2/htdocs/:ro
 
 
 

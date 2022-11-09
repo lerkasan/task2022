@@ -3,10 +3,10 @@
 
 Vagrant.configure("2") do |config|
   config.vm.box = "bento/ubuntu-22.04"
-  config.vm.network :forwarded_port, guest: 80, host: 80, auto_correct:true
+  config.vm.network :forwarded_port, guest: 80, host: 8081, id: 'apache2 service', auto_correct:true
+  config.vm.network :forwarded_port, guest: 8080, host: 8080, id: 'httpd container', auto_correct:true
   config.vm.network "private_network", ip: "192.168.33.10"
   config.vm.synced_folder "./playbooks", "/home/vagrant/playbooks"
-  config.vm.synced_folder "./html", "/home/vagrant/html"
 
   config.vm.provider "virtualbox" do |vb|
     vb.memory = "4096"
@@ -16,10 +16,17 @@ Vagrant.configure("2") do |config|
     shell.path = "./install_ansible.sh"
   end
 
-  config.vm.provision "ansible_local" do |ansible|
+  config.vm.provision "httpd_container", type: "ansible_local" do |ansible|
     ansible.verbose = "v"
     ansible.playbook = "./playbooks/run_httpd_container.yml"
     ansible.inventory_path  = "./playbooks/inventory"
     run = "always"
   end
+
+    config.vm.provision "httpd_package", type: "ansible_local" do |ansible|
+      ansible.verbose = "v"
+      ansible.playbook = "./playbooks/install_httpd_package.yml"
+      ansible.inventory_path  = "./playbooks/inventory"
+      run = "always"
+    end
 end

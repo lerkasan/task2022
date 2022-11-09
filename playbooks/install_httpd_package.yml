@@ -1,0 +1,44 @@
+---
+- name: Deploy HTML page in Apache Httpd container
+  hosts: default
+  become: yes
+  become_user: root
+
+  tasks:
+    - name: Install Apache Httpd package
+      apt:
+        pkg:
+          - apache2
+        state: present
+        update_cache: yes
+
+    - name: Create document root for localhost
+      file:
+        path: "/var/www/{{ http_host }}"
+        state: directory
+        owner: www-data
+        group: www-data
+        mode: '0755'
+
+    - name: Copy index.html
+      template:
+        src: "html/index.html"
+        dest: "/var/www/{{ http_host }}/index.html"
+
+    - name: Config virtual host
+      template:
+        src: "config/{{ http_conf }}"
+        dest: "/etc/apache2/sites-available/{{ http_conf }}"
+
+    - name: Enable site
+      command: a2ensite {{ http_conf }}
+      notify: restart-apache
+
+  handlers:
+    - name: restart-apache
+      service:
+        name: apache2
+        state: restarted
+
+
+
