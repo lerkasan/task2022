@@ -51,7 +51,7 @@
         published_ports:
           - 8080:80
         volumes:
-          - /home/vagrant/playbooks/html:/usr/local/apache2/htdocs/:ro
+          - /home/vagrant/html:/usr/local/apache2/htdocs/:ro
 
 
 
