@@ -20,12 +20,12 @@
         group: www-data
         mode: '0755'
 
-    - name: Copy index.html
+    - name: Copy index.html to document root
       template:
         src: "html/index.html"
         dest: "/var/www/{{ http_host }}/index.html"
 
-    - name: Config virtual host
+    - name: Configure virtual host
       template:
         src: "config/{{ http_conf }}"
         dest: "/etc/apache2/sites-available/{{ http_conf }}"
